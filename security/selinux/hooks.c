@@ -115,7 +115,19 @@ static int selinux_enforcing_boot __initdata;
 static int __init enforcing_setup(char *str)
 {
 	unsigned long enforcing;
-	if (!kstrtoul(str, 0, &enforcing))
+
+	if (!kstrtoul(str, 0, &enforcing)) {
+
+// [ SEC_SELINUX_PORTING_COMMON
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+		selinux_enforcing = 1;
+		selinux_enforcing_boot = 1;
+#elif defined(CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE)
+		selinux_enforcing = 0;
+		selinux_enforcing_boot = 0;
+
+#else
+
 		selinux_enforcing_boot = enforcing ? 1 : 0;
 	return 1;
 }
@@ -130,7 +142,17 @@ static int __init selinux_enabled_setup(char *str)
 {
 	unsigned long enabled;
 	if (!kstrtoul(str, 0, &enabled))
-		selinux_enabled_boot = enabled ? 1 : 0;
+
+	{
+// [ SEC_SELINUX_PORTING_COMMON
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+		selinux_enabled = 1;
+#else
+		selinux_enabled = enabled ? 1 : 0;
+	#endif
+// ] SEC_SELINUX_PORTING_COMMON
+	}
+
 	return 1;
 }
 __setup("selinux=", selinux_enabled_setup);
@@ -7238,15 +7260,16 @@ static struct security_hook_list selinux_hooks[] __lsm_ro_after_init = {
 	LSM_HOOK_INIT(perf_event_write, selinux_perf_event_write),
 #endif
 
-	/*
-	 * PUT "CLONING" (ACCESSING + ALLOCATING) HOOKS HERE
-	 */
-	LSM_HOOK_INIT(fs_context_dup, selinux_fs_context_dup),
-	LSM_HOOK_INIT(fs_context_parse_param, selinux_fs_context_parse_param),
-	LSM_HOOK_INIT(sb_eat_lsm_opts, selinux_sb_eat_lsm_opts),
-	LSM_HOOK_INIT(sb_add_mnt_opt, selinux_add_mnt_opt),
-#ifdef CONFIG_SECURITY_NETWORK_XFRM
-	LSM_HOOK_INIT(xfrm_policy_clone_security, selinux_xfrm_policy_clone),
+
+static __init int selinux_init(void)
+{
+	if (!security_module_enable("selinux")) {
+// [ SEC_SELINUX_PORTING_COMMON
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+		selinux_enabled = 1;
+#else
+		selinux_enabled = 0;
+
 #endif
 
 	/*
@@ -7318,6 +7341,18 @@ static __init int selinux_init(void)
 
 	if (avc_add_callback(selinux_lsm_notifier_avc_callback, AVC_CALLBACK_RESET))
 		panic("SELinux: Unable to register AVC LSM notifier callback\n");
+
+// [ SEC_SELINUX_PORTING_COMMON
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+		selinux_enforcing_boot = 1;
+
+		selinux_enforcing = 1;
+#elif defined(CONFIG_SECURITY_SELINUX_ALWAYS_PERMISSIVE)
+		selinux_enforcing_boot = 0;
+		selinux_enforcing = 0;
+
+#endif
+// ] SEC_SELINUX_PORTING_COMMON
 
 	if (selinux_enforcing_boot)
 		pr_debug("SELinux:  Starting in enforcing mode\n");
@@ -7416,6 +7451,13 @@ static struct pernet_operations selinux_net_ops = {
 static int __init selinux_nf_ip_init(void)
 {
 	int err;
+
+// [ SEC_SELINUX_PORTING_COMMON
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+		selinux_enabled = 1;
+#endif
+// ] SEC_SELINUX_PORTING_COMMON						   
+
 
 	if (!selinux_enabled_boot)
 		return 0;

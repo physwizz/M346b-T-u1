@@ -266,6 +266,13 @@ static __init int sel_netif_init(void)
 {
 	int i;
 
+// [ SEC_SELINUX_PORTING_COMMON
+#ifdef CONFIG_SECURITY_SELINUX_ALWAYS_ENFORCE
+	selinux_enabled = 1;
+#endif
+// ] SEC_SELINUX_PORTING_COMMON				   
+
+
 	if (!selinux_enabled_boot)
 		return 0;
 
