@@ -7077,13 +7077,6 @@ CONFIG_HICCUP_CC_DISABLE=y
 CONFIG_SEC_KQ_MESH=m
 
 #
-# samsung Performace manager
-#
-CONFIG_KPERFMON=y
-CONFIG_KPERFMON_BUILD=m
-# end of samsung Performace manager
-
-#
 # USB TypeC Manager configs
 #
 CONFIG_USB_TYPEC_MANAGER_NOTIFIER=m

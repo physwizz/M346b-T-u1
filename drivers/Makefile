@@ -217,8 +217,9 @@ obj-y += input/input_boost/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 obj-y += usb/common/vbus_notifier/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 obj-y += battery/core/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 obj-y += muic/common/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
-obj-y += kq/mesh/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
-obj-y += kperfmon/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
+
+obj-y += usb/typec/slsi/s2mf301/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
+
 obj-y += usb/typec/manager/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 obj-y += gpu/drm/samsung/panel/s6e3fc3/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 obj-y += gpu/drm/samsung/panel/oled_common/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
