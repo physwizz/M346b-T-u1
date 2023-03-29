@@ -36,11 +36,14 @@ obj-$(CONFIG_BPF_LSM)			+= bpf/
 # Object integrity file lists
 subdir-$(CONFIG_INTEGRITY)		+= integrity
 obj-$(CONFIG_INTEGRITY)			+= integrity/
+<<<<<<< HEAD
 
 # KNOX DAR
 obj-$(CONFIG_SDP) += sdp/
 obj-$(CONFIG_SDP) += sdp/built-in.a
 obj-y += samsung/defex_lsm/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
+=======
+>>>>>>> a1cd818d9... security: Kill defex
 obj-y += samsung/proca/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 obj-y += samsung/proca/gaf/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
 obj-y += samsung/mz/ # ADDED BY LEGO AUTOMATICALLY: DO NOT SUBMIT
