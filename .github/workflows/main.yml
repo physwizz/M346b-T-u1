@@ -1,0 +1,29 @@
+on:
+  workflow_dispatch:
+  
+  
+jobs: 
+  run_build:
+   runs-on: ubuntu-latest
+   
+   steps:
+   
+   - name: Check out the repository to the runner 
+     uses: actions/checkout@v4
+     
+   - name: update
+     run: sudo apt update
+   - name: upgrade
+     run: sudo apt -y upgrade
+   - name: Install 
+     run: sudo apt -y install python-is-python3 build-essential python3-virtualenv python2.7 openssl
+   - name: apt-get     
+     run: sudo apt-get -y install aptitude make gcc libtinfo5
+   - name: aptitude 
+     run: sudo aptitude -y install libssl-dev
+        
+   - name: make script file executable 
+     run: chmod +x build_kernel.sh
+     
+   - name: Run script file
+     run: ./build_kernel.sh
